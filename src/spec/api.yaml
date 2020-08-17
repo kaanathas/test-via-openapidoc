@@ -1,0 +1,121 @@
+openapi: "3.0.0"
+info:
+  title: Simple API overview
+  version: 2.0.0
+paths:
+
+  /:
+    get:
+      summary: Show the version of the API
+      responses:
+        '200':
+          $ref: '#/components/responses/VersionResponse'
+        '500':
+          $ref: '#/components/responses/VersionResponse'
+  /try:
+    get:
+      summary: Show the version of the API
+      responses:
+        '200':
+          $ref: '#/components/responses/VersionResponse'
+  /records:
+    post:
+      summary: 'Provides search capability.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                criteria:
+                  type: string
+                  description: 'Search string'
+                start:
+                  description: Starting record number.
+                  type: integer
+                  minimum: 0
+                rows:
+                  type: integer
+                  default: 100
+                  minimum: 1
+                  maximum: 100
+              required:
+                - criteria
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id: 
+                      type: number
+                      example: 4011,
+                    title:
+                      type: string
+                      example: 'Latest report 2019'
+                    created:
+                      type: string
+                      format: date-time
+                    archived:
+                      type: boolean
+                      default: false
+                    ISBN:
+                      type: string
+                      pattern: 'ISBN\x20(?=.{13}$)\d{1,5}([- ])\d{1,7}\1\d{1,6}\1(\d|X)$'
+                      example: 'ISBN 1-56389-016-X'
+                    
+        '404':
+          description: No matching record found for the given criteria.
+   
+   
+components:
+  responses:
+    VersionResponse:
+      description: Version response object
+      headers:
+        X-Request-Id:
+          $ref: '#/components/headers/X-Request-Id'
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Version"
+    errorResponce:
+      description: error 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      
+  headers:
+    X-Request-Id:
+      required: true
+      description: unique ID for the request
+      schema:
+        $ref: '#/components/schemas/XRequestId'
+
+  schemas:
+    Version:
+      type: object
+      required:
+        - version
+      properties:
+        version:
+          type: string
+          example: 1.23.45
+          pattern: ^\d\.\d\.\d$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+
+    XRequestId:
+      description: unique ID for the request
+      type: string
+      format: uuid

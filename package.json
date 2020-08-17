@@ -1,0 +1,23 @@
+{
+  "name": "validateapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --exit --timeout 10000"
+  },
+  "author": "kaanathas",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "faker": "^4.1.0"
+  },
+  "devDependencies": {
+    "app-root-path": "^3.0.0",
+    "chai": "^4.2.0",
+    "express-openapi-validate": "^0.5.1",
+    "js-yaml": "^3.14.0",
+    "mocha": "^8.1.1",
+    "supertest": "^4.0.2"
+  }
+}
